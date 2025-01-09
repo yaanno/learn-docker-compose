@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build: ../service-frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - nginx # Still depends on nginx to start after it
+  backend:
+    build: ../service-backend
+    ports:
+      - "8080:8080"
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    env_file:
+      - .env
+    depends_on:
+      - backend # It should depend on the backend
